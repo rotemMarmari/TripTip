@@ -21,10 +21,6 @@ app.get("/api/test", (req, res) => {
   res.json({ message: "Backend is connected!" });
 });
 
-app.get("/api/mapbox-key", (req, res) => {
-  res.json({ apiKey: process.env.MAPBOX_API_KEY });
-});
-
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
