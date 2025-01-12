@@ -1,5 +1,6 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
+import { getCoords } from "./services/mapService.js";
 
 const app = express();
 const PORT = 3000;
@@ -13,12 +14,26 @@ app.use(
   })
 );
 
-// Middleware to parse JSON bodies
 app.use(express.json());
 
-// Example route
-app.get("/api/test", (req, res) => {
-  res.json({ message: "Backend is connected!" });
+app.get("/api/coords", async (req, res) => {
+  try {
+    const destination = req.query.destination;
+    if (!destination) {
+      return res.status(400).json({ error: "Destination query parameter is required." });
+    }
+
+    const coords = await getCoords(destination);
+    if (!coords) {
+      return res.status(404).json({ error: "Location not found." });
+    }
+
+    const { lat, lon } = coords;
+    res.status(200).json({ lat, lon });
+  } catch (error) {
+    console.error("Error fetching coordinates:", error.message);
+    res.status(500).send("An error occurred while fetching coordinates.");
+  }
 });
 
 app.listen(PORT, () => {

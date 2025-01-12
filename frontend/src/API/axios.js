@@ -10,14 +10,14 @@ const api = axios.create({
   },
 });
 
-export const backendCheck = async () => {
+export const fetchCoordinates = async (destination) => {
   try {
-    const response = await api.get("/api/test");
-    console.log(response.data.message);
-    return response;
+    const response = await api.get(`/api/coords?destination=${destination}`);
+    return response.data; // Return coordinates
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching coordinates:", error.message);
+    return null;
   }
-};
+}
 
 export default api;

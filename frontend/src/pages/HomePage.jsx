@@ -1,29 +1,45 @@
 import React, { useState } from "react";
-import { backendCheck } from "../API/axios";
 import Map from "../components/Map";
 import "../styles/HomePageStyle.css";
+import { fetchCoordinates } from "../API/axios";
 
 const HomePage = () => {
-  const [connect, setConnect] = useState("Not connected");
+  const [destination, setDestination] = useState("");
+  const [coords, setCoords] = useState(null); // Store coordinates
 
-  const handleConnect = async () => {
+  const handleSearch = async () => {
     try {
-      const response = await backendCheck();
-      console.log(response.data.message);
-      setConnect(response.data.message);
+      const result = await fetchCoordinates(destination); // Call API function
+      if (result) {
+        setCoords(result); // Update coordinates
+      } else {
+        alert("Location not found.");
+      }
     } catch (error) {
-      console.error(error);
+      console.error("Error during search:", error.message);
     }
   };
 
   return (
     <div>
       <div className="header">
-        <h1>HomePage</h1>
+        <h1>TripTip</h1>
       </div>
-      <button onClick={handleConnect}>Connect</button>
-      <h3>{connect}</h3>
-      <Map />
+      <div className="searchBox">
+        <input
+          type="text"
+          placeholder="Enter destination"
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
+        />
+        <select>
+          <option value="Walk">Walk</option>
+          <option value="Bicycle">Bicycle</option>
+          <option value="Car">Car</option>
+        </select>
+        <button onClick={handleSearch}>Search</button>
+      </div>
+      <Map lat={coords?.lat} lon={coords?.lon} /> {/* Pass coordinates to Map */}
     </div>
   );
 };
