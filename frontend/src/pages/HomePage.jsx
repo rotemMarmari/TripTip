@@ -5,6 +5,7 @@ import { fetchCoordinates } from "../API/axios";
 
 const HomePage = () => {
   const [destination, setDestination] = useState("");
+  const [transport, setTransport] = useState("Walk");
   const [coords, setCoords] = useState(null); // Store coordinates
 
   const handleSearch = async () => {
@@ -36,6 +37,7 @@ const HomePage = () => {
           <option value="Walk">Walk</option>
           <option value="Bicycle">Bicycle</option>
           <option value="Car">Car</option>
+          onChange={(e) => setTransport(e.target.value)}
         </select>
         <button onClick={handleSearch}>Search</button>
       </div>

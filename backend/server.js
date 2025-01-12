@@ -5,10 +5,9 @@ import { getCoords } from "./services/mapService.js";
 const app = express();
 const PORT = 3000;
 
-// CORS Configuration
 app.use(
   cors({
-    origin: "http://localhost:5173", // Your React frontend URL
+    origin: "http://localhost:5173", 
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })

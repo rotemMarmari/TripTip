@@ -4,18 +4,16 @@ import L from "leaflet";
 import "../styles/MapStyle.css";
 
 const Map = ({ lat, lon }) => {
-  const mapRef = useRef(null); // Map container ref
-  const leafletMap = useRef(null); // Leaflet map instance ref
+  const mapRef = useRef(null); 
+  const leafletMap = useRef(null); 
 
   useEffect(() => {
     if (!leafletMap.current) {
-      // Initialize map
       leafletMap.current = L.map(mapRef.current, {
-        center: [32.08, 34.78], // Default center
+        center: [32.08, 34.78], // Default center to Tel Aviv
         zoom: 14,
       });
 
-      // Add a tile layer
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
