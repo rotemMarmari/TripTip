@@ -7,19 +7,51 @@ const cohere = new CohereClientV2({
 });
 
 export const getTripTips = async (destination, transportation) => {
-  const prompt = `You are a tour guide, and your mission is to create a trip to a tourist who is traveling in ${destination} by ${transportation}. Mention 3 attractions they should visit. use 150 words max`;
+  const prompt = `Generate a JSON object with an "attractions" field containing an array of tourist attractions in ${destination}, designed for a traveler using ${transportation}. Each attraction should have "name", "description", and "coordinates" (latitude and longitude).`;
 
   try {
-    const response = await cohere.generate({
+    const response = await cohere.chat({
       model: "command-r-plus-08-2024",
-      prompt,
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      response_format: {
+        type: "json_object",
+        schema: {
+          type: "object",
+          properties: {
+            attractions: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  description: { type: "string" },
+                  coordinates: {
+                    type: "object",
+                    properties: {
+                      latitude: { type: "number" },
+                      longitude: { type: "number" },
+                    },
+                    required: ["latitude", "longitude"],
+                  },
+                },
+                required: ["name", "description", "coordinates"],
+              },
+            },
+          },
+          required: ["attractions"],
+        },
+      },
     });
 
     console.log("Cohere API response:", JSON.stringify(response, null, 2));
 
-    if (response && response.generations && response.generations.length > 0) {
-      // Extract the text content from the first generation
-      return response.generations[0].text.trim();
+    if (response?.message?.content) {
+      return response.message.content; // The content should already be a valid JSON object
     } else {
       throw new Error("Invalid response structure or no content found.");
     }

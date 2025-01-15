@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Map from "../components/Map";
 import "../styles/HomePageStyle.css";
 import { fetchCoordinates, fetchTripTips } from "../API/axios";
@@ -7,32 +7,46 @@ const HomePage = () => {
   const [destination, setDestination] = useState("");
   const [transport, setTransport] = useState("Walk");
   const [coords, setCoords] = useState(null);
-  const [tripTips, setTripTips] = useState(null);
+  const [tripTips, setTripTips] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async () => {
+    setLoading(true);
     try {
-      const result = await fetchCoordinates(destination); // Call API function
+      const [result, tipResult] = await Promise.all([
+        fetchCoordinates(destination),
+        fetchTripTips(destination, transport),
+      ]);
+
+      // Handle coordinates
       if (result) {
-        setCoords(result); // Update coordinates
+        setCoords(result);
       } else {
         alert("Location not found.");
       }
-    } catch (error) {
-      console.error("Error during search:", error.message);
-    }
 
-    try {
-      const TipResult = await fetchTripTips(destination, transport); 
-      console.log(destination, transport);
-      if (TipResult) {
-        setTripTips(TipResult); 
+      // Handle trip tips
+      if (tipResult) {
+        try {
+          const parsedTips = JSON.parse(tipResult[0]?.text ?? "{}");
+          setTripTips(parsedTips?.attractions || []);
+        } catch (parseError) {
+          console.error("Error parsing trip tips:", parseError);
+          alert("Failed to parse trip tips.");
+        }
       } else {
         alert("Trip tips not found.");
       }
     } catch (error) {
       console.error("Error during search:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    console.log("Updated tripTips:", tripTips);
+  }, [tripTips]);
 
   return (
     <div>
@@ -56,12 +70,17 @@ const HomePage = () => {
         </select>
         <button onClick={handleSearch}>Search</button>
       </div>
-      <Map lat={coords?.lat} lon={coords?.lon} />{" "}
+      <div className="loading">{loading ? "Loading..." : ""}</div>
+      <Map lat={coords?.lat} lon={coords?.lon} attractions={tripTips} />
       {/* Pass coordinates to Map */}
       <div className="tripTips">
         <h2>Trip Tips</h2>
         <ul>
-          {tripTips}
+          {tripTips.map((attraction, index) => (
+            <li key={index}>
+              <b>{attraction.name}:</b> {attraction.description}
+            </li>
+          ))}
         </ul>
       </div>
     </div>
