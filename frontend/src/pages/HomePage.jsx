@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Map from "../components/Map";
 import "../styles/HomePageStyle.css";
-import { fetchCoordinates } from "../API/axios";
+import { fetchCoordinates, fetchTripTips } from "../API/axios";
 
 const HomePage = () => {
   const [destination, setDestination] = useState("");
   const [transport, setTransport] = useState("Walk");
-  const [coords, setCoords] = useState(null); // Store coordinates
+  const [coords, setCoords] = useState(null);
+  const [tripTips, setTripTips] = useState(null);
 
   const handleSearch = async () => {
     try {
@@ -15,6 +16,18 @@ const HomePage = () => {
         setCoords(result); // Update coordinates
       } else {
         alert("Location not found.");
+      }
+    } catch (error) {
+      console.error("Error during search:", error.message);
+    }
+
+    try {
+      const TipResult = await fetchTripTips(destination, transport); 
+      console.log(destination, transport);
+      if (TipResult) {
+        setTripTips(TipResult); 
+      } else {
+        alert("Trip tips not found.");
       }
     } catch (error) {
       console.error("Error during search:", error.message);
@@ -33,15 +46,24 @@ const HomePage = () => {
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
         />
-        <select>
+        <select
+          onChange={(e) => setTransport(e.target.value)}
+          value={transport}
+        >
           <option value="Walk">Walk</option>
           <option value="Bicycle">Bicycle</option>
           <option value="Car">Car</option>
-          onChange={(e) => setTransport(e.target.value)}
         </select>
         <button onClick={handleSearch}>Search</button>
       </div>
-      <Map lat={coords?.lat} lon={coords?.lon} /> {/* Pass coordinates to Map */}
+      <Map lat={coords?.lat} lon={coords?.lon} />{" "}
+      {/* Pass coordinates to Map */}
+      <div className="tripTips">
+        <h2>Trip Tips</h2>
+        <ul>
+          {tripTips}
+        </ul>
+      </div>
     </div>
   );
 };

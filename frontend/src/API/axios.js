@@ -13,11 +13,25 @@ const api = axios.create({
 export const fetchCoordinates = async (destination) => {
   try {
     const response = await api.get(`/api/coords?destination=${destination}`);
-    return response.data; // Return coordinates
+    return response.data; 
   } catch (error) {
     console.error("Error fetching coordinates:", error.message);
     return null;
   }
 }
+
+export const fetchTripTips = async (destination, transportation) => {
+  try {
+    const response = await api.get(`/api/trip-tips`, {
+      params: { destination, transportation }, 
+    });
+    return response.data.tripTips; 
+  } catch (error) {
+    console.error("Error fetching trip tips:", error.message);
+    return null;
+  }
+};
+
+
 
 export default api;
