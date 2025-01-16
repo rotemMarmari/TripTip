@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { getCoords } from "./services/mapService.js";
-import { getTripTips } from "./services/cohere.js";
+import { getTripTips, getPexelsImage } from "./services/ai.js";
 
 const app = express();
 const PORT = 3000;
@@ -56,6 +56,25 @@ app.get("/api/trip-tips", async (req, res) => {
   }
 });
 
+
+app.get("/api/GetImage", async (req, res) => {
+  try {
+    const { destination  } = req.query;
+    if (!destination ) {
+      return res.status(400).json({ error: "destination parameter is required." });
+    }
+    
+    const query = destination + " skyline";
+    const image = await getPexelsImage(query);
+    if (!image) {
+      return res.status(404).json({ error: "Image not found." });
+    }
+    res.status(200).json({ image });
+  } catch (error) {
+    console.error("Error fetching image:", error.message);
+    res.status(500).send("An error occurred while fetching image.");
+  }
+})
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

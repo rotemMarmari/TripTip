@@ -3,7 +3,7 @@ import Map from "../components/Map";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "../styles/HomePageStyle.css";
-import { fetchCoordinates, fetchTripTips } from "../API/axios";
+import { fetchCoordinates, fetchTripTips, fetchImage } from "../API/axios";
 
 const HomePage = () => {
   const [destination, setDestination] = useState("");
@@ -11,13 +11,15 @@ const HomePage = () => {
   const [coords, setCoords] = useState(null);
   const [tripTips, setTripTips] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
 
   const handleSearch = async () => {
     setLoading(true);
     try {
-      const [result, tipResult] = await Promise.all([
+      const [result, tipResult, imageResult] = await Promise.all([
         fetchCoordinates(destination),
         fetchTripTips(destination, transport),
+        fetchImage(destination),
       ]);
 
       // Handle coordinates
@@ -39,6 +41,13 @@ const HomePage = () => {
       } else {
         alert("Trip tips not found.");
       }
+
+      // Handle image
+      if (imageResult) {
+        setImage(imageResult);
+      } else {
+        console.log("Image not found.");
+      }
     } catch (error) {
       console.error("Error during search:", error.message);
     } finally {
@@ -46,13 +55,9 @@ const HomePage = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Updated tripTips:", tripTips);
-  }, [tripTips]);
-
   return (
     <div>
-       <Header />
+      <Header />
       <div className="searchBox">
         <input
           type="text"
@@ -72,7 +77,7 @@ const HomePage = () => {
       </div>
       <div className="loading">{loading ? "Loading..." : ""}</div>
       <div className="map-container">
-      <Map lat={coords?.lat} lon={coords?.lon} attractions={tripTips} />
+        <Map lat={coords?.lat} lon={coords?.lon} attractions={tripTips} />
       </div>
       {/* Pass coordinates to Map */}
       <div className="tripTips">
@@ -84,6 +89,13 @@ const HomePage = () => {
             </li>
           ))}
         </ul>
+        <div className="image-container">
+          {image ? (
+            <img src={image} alt="Destination" />
+          ) : (
+            <p>No image available for this destination.</p>
+          )}
+        </div>
       </div>
       <Footer />
     </div>

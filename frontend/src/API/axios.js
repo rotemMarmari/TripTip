@@ -32,6 +32,19 @@ export const fetchTripTips = async (destination, transportation) => {
   }
 };
 
+export const fetchImage = async (destination) => {
+  try {
+    console.log("Fetching image for destination:", destination);
+    const response = await api.get("/api/GetImage", {
+      params: { destination }, 
+    });
+    return response.data.image; 
+  } catch (error) {
+    console.error("Error fetching image:", error.message);
+    return null;
+  }
+};
+
 
 
 export default api;
