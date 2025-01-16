@@ -1,4 +1,5 @@
-/* .map {
-    width: 200vw;
-    height: 100vh;
-} */
+.map-container {
+  padding: 4vh;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,17 +1,11 @@
-h1{
+/* h1{
     text-align: center;
     margin-top: 20px;
     color: lightblue;
     font-size: 50px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
+} */
 
-header{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
 
 button{
     margin-top: 20px;
@@ -27,4 +21,16 @@ button{
 
 button:hover{
     background-color: grey;
+}
+
+.searchBox{
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    align-items: center;
 }

@@ -48,7 +48,7 @@ export const getTripTips = async (destination, transportation) => {
       },
     });
 
-    console.log("Cohere API response:", JSON.stringify(response, null, 2));
+    console.log("Cohere API response:", response.message.content);
 
     if (response?.message?.content) {
       return response.message.content; // The content should already be a valid JSON object

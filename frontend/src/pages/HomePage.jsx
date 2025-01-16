@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Map from "../components/Map";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "../styles/HomePageStyle.css";
 import { fetchCoordinates, fetchTripTips } from "../API/axios";
 
@@ -50,9 +52,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <div className="header">
-        <h1>TripTip</h1>
-      </div>
+       <Header />
       <div className="searchBox">
         <input
           type="text"
@@ -71,7 +71,9 @@ const HomePage = () => {
         <button onClick={handleSearch}>Search</button>
       </div>
       <div className="loading">{loading ? "Loading..." : ""}</div>
+      <div className="map-container">
       <Map lat={coords?.lat} lon={coords?.lon} attractions={tripTips} />
+      </div>
       {/* Pass coordinates to Map */}
       <div className="tripTips">
         <h2>Trip Tips</h2>
@@ -83,6 +85,7 @@ const HomePage = () => {
           ))}
         </ul>
       </div>
+      <Footer />
     </div>
   );
 };
