@@ -23,7 +23,7 @@ button:hover{
     background-color: grey;
 }
 
-.searchBox{
+.searchBox-container{
     margin-top: 20px;
     padding: 10px 20px;
     border: none;
@@ -33,7 +33,49 @@ button:hover{
     transition: background-color 0.3s ease;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     align-items: center;
+    justify-content: center;
 }
+
+.searchBox-container input {
+    border: 2px solid transparent;
+    width: 15em;
+    height: 2.5em;
+    padding-left: 0.8em;
+    outline: none;
+    overflow: hidden;
+    background-color: #F3F3F3;
+    border-radius: 10px;
+    transition: all 0.5s;
+    margin-right: 5rem;
+    margin-left: 2rem;
+  }
+  
+  .searchBox-container input:hover,
+  .input:focus {
+    border: 2px solid #4A9DEC;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
+  }
+
+  .searchBox-container button {
+    width: 100px;
+    height: 40px;
+    border: 3px solid #315cfd;
+    border-radius: 45px;
+    transition: all 0.3s;
+    cursor: pointer;
+    background: white;
+    font-size: 1em;
+    font-weight: 550;
+    margin-left: 5rem;
+  }
+  
+  .searchBox-container button:hover {
+    background: #315cfd;
+    color: white;
+    font-size: 1.1em;
+  }
+  
 
 .image-container {
     display: flex;

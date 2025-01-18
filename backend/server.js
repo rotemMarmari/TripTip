@@ -38,13 +38,13 @@ app.get("/api/coords", async (req, res) => {
 
 app.get("/api/trip-tips", async (req, res) => {
   try {
-    const { destination, transportation } = req.query;
+    const { destination, tripType } = req.query;
 
-    if (!destination || !transportation) {
-      return res.status(400).json({ error: "Missing destination or transportation query parameter." });
+    if (!destination || !tripType) {
+      return res.status(400).json({ error: "Missing destination or trip type query parameter." });
     }
 
-    const tripTips = await getTripTips(destination, transportation); 
+    const tripTips = await getTripTips(destination, tripType); 
     if (!tripTips) {
       return res.status(404).json({ error: "No trip tips found." });
     }
@@ -64,7 +64,7 @@ app.get("/api/GetImage", async (req, res) => {
       return res.status(400).json({ error: "destination parameter is required." });
     }
     
-    const query = destination + " skyline";
+    const query ="Skyline of " + destination;
     const image = await getPexelsImage(query);
     if (!image) {
       return res.status(404).json({ error: "Image not found." });

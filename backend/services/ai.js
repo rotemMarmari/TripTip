@@ -18,8 +18,8 @@ export const getPexelsImage = async (query) => {
   }
 }
 
-export const getTripTips = async (destination, transportation) => {
-  const prompt = `Generate a JSON object with an "attractions" field containing an array of tourist attractions in ${destination}, designed for a traveler using ${transportation}. Each attraction should have "name", "description", and "coordinates" (latitude and longitude).`;
+export const getTripTips = async (destination, tripType) => {
+  const prompt = `Generate a JSON object with an "attractions" field containing an array of tourist attractions in ${destination} for a ${tripType} trip. Each attraction should have "name", "description", and "coordinates" (latitude and longitude).`;
 
   try {
     const response = await cohere.chat({
@@ -61,7 +61,7 @@ export const getTripTips = async (destination, transportation) => {
     });
 
     if (response?.message?.content) {
-      return response.message.content; // The content should already be a valid JSON object
+      return response.message.content;
     } else {
       throw new Error("Invalid response structure or no content found.");
     }

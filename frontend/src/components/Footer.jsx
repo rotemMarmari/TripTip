@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className="footer">
       <p>&copy; 2025 TripTip. All rights reserved.</p>
       <p>
-        Made with ❤️ by <a href="https://github.com/rotemMarmari">Rotem Marmari</a>
+        Made with ❤️ by <a href="https://github.com/rotemMarmari" target="_blank" rel="noopener noreferrer">Rotem Marmari</a>
       </p>
     </footer>
   );

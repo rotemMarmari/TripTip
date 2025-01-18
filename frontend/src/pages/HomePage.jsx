@@ -7,7 +7,7 @@ import { fetchCoordinates, fetchTripTips, fetchImage } from "../API/axios";
 
 const HomePage = () => {
   const [destination, setDestination] = useState("");
-  const [transport, setTransport] = useState("Walk");
+  const [tripType, setTripType] = useState("Walk");
   const [coords, setCoords] = useState(null);
   const [tripTips, setTripTips] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ const HomePage = () => {
     try {
       const [result, tipResult, imageResult] = await Promise.all([
         fetchCoordinates(destination),
-        fetchTripTips(destination, transport),
+        fetchTripTips(destination, tripType),
         fetchImage(destination),
       ]);
 
@@ -58,7 +58,7 @@ const HomePage = () => {
   return (
     <div>
       <Header />
-      <div className="searchBox">
+      <div className="searchBox-container">
         <input
           type="text"
           placeholder="Enter destination"
@@ -66,12 +66,13 @@ const HomePage = () => {
           onChange={(e) => setDestination(e.target.value)}
         />
         <select
-          onChange={(e) => setTransport(e.target.value)}
-          value={transport}
+          onChange={(e) => setTripType(e.target.value)}
+          value={tripType}
         >
-          <option value="Walk">Walk</option>
-          <option value="Bicycle">Bicycle</option>
-          <option value="Car">Car</option>
+          <option value="Solo">Solo</option>
+          <option value="Family">Family</option>
+          <option value="Couple">Couple</option>
+          <option value="Friends Group">Friends Group</option>
         </select>
         <button onClick={handleSearch}>Search</button>
       </div>

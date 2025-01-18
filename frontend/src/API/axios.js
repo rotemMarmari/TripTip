@@ -20,10 +20,10 @@ export const fetchCoordinates = async (destination) => {
   }
 }
 
-export const fetchTripTips = async (destination, transportation) => {
+export const fetchTripTips = async (destination, tripType) => {
   try {
     const response = await api.get(`/api/trip-tips`, {
-      params: { destination, transportation }, 
+      params: { destination, tripType }, 
     });
     return response.data.tripTips; 
   } catch (error) {
