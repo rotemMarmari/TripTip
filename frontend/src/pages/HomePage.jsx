@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import Map from "../components/Map";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import "../styles/HomePageStyle.css";
+import AttractionCard from "../components/AttractionCard";
+import "../styles/HomePage.css";
 import { fetchCoordinates, fetchTripTips, fetchImage } from "../API/axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const HomePage = () => {
   const [destination, setDestination] = useState("");
@@ -12,6 +14,7 @@ const HomePage = () => {
   const [tripTips, setTripTips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
+  const [searched, setSearched] = useState(false);
 
   const handleSearch = async () => {
     setLoading(true);
@@ -44,6 +47,7 @@ const HomePage = () => {
 
       // Handle image
       if (imageResult) {
+        setSearched(true);
         setImage(imageResult);
       } else {
         console.log("Image not found.");
@@ -65,10 +69,7 @@ const HomePage = () => {
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
         />
-        <select
-          onChange={(e) => setTripType(e.target.value)}
-          value={tripType}
-        >
+        <select onChange={(e) => setTripType(e.target.value)} value={tripType}>
           <option value="Solo">Solo</option>
           <option value="Family">Family</option>
           <option value="Couple">Couple</option>
@@ -76,27 +77,30 @@ const HomePage = () => {
         </select>
         <button onClick={handleSearch}>Search</button>
       </div>
-      <div className="loading">{loading ? "Loading..." : ""}</div>
+      <div className="loader">{loading ? <CircularProgress /> : ""}</div>
       <div className="map-container">
         <Map lat={coords?.lat} lon={coords?.lon} attractions={tripTips} />
       </div>
       {/* Pass coordinates to Map */}
       <div className="tripTips">
         <h2>Trip Tips</h2>
-        <ul>
+        <div className="cards-container">
           {tripTips.map((attraction, index) => (
-            <li key={index}>
-              <b>{attraction.name}:</b> {attraction.description}
-            </li>
+            <AttractionCard
+              key={index}
+              attraction={attraction.name}
+              description={attraction.description}
+            />
           ))}
-        </ul>
-        <div className="image-container">
-          {image ? (
+        </div>
+      </div>
+      <div className="image-container">
+        {searched &&
+          (image ? (
             <img src={image} alt="Destination" />
           ) : (
             <p>No image available for this destination.</p>
-          )}
-        </div>
+          ))}
       </div>
       <Footer />
     </div>

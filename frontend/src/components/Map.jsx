@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import "../styles/MapStyle.css";
+import "../styles/Map.css";
 
 const Map = ({ lat, lon, attractions }) => {
   const mapRef = useRef(null);

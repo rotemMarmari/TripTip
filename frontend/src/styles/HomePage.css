@@ -1,10 +1,4 @@
-/* h1{
-    text-align: center;
-    margin-top: 20px;
-    color: lightblue;
-    font-size: 50px;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-} */
+
 
 
 button{
@@ -23,6 +17,23 @@ button:hover{
     background-color: grey;
 }
 
+.loader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; 
+  justify-content: center; 
+}
+
+.tripTips {
+  padding: 20px;
+}
+
 .searchBox-container{
     margin-top: 20px;
     padding: 10px 20px;
@@ -32,8 +43,10 @@ button:hover{
     font-size: 16px;
     transition: background-color 0.3s ease;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    align-items: center;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 8rem;
 }
 
 .searchBox-container input {
@@ -46,8 +59,6 @@ button:hover{
     background-color: #F3F3F3;
     border-radius: 10px;
     transition: all 0.5s;
-    margin-right: 5rem;
-    margin-left: 2rem;
   }
   
   .searchBox-container input:hover,
@@ -67,7 +78,6 @@ button:hover{
     background: white;
     font-size: 1em;
     font-weight: 550;
-    margin-left: 5rem;
   }
   
   .searchBox-container button:hover {
