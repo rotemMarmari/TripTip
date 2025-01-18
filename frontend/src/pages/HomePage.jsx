@@ -7,7 +7,7 @@ import { fetchCoordinates, fetchTripTips, fetchImage } from "../API/axios";
 
 const HomePage = () => {
   const [destination, setDestination] = useState("");
-  const [tripType, setTripType] = useState("Walk");
+  const [tripType, setTripType] = useState("Solo");
   const [coords, setCoords] = useState(null);
   const [tripTips, setTripTips] = useState([]);
   const [loading, setLoading] = useState(false);
