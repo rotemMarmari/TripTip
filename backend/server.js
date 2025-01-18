@@ -64,7 +64,7 @@ app.get("/api/GetImage", async (req, res) => {
       return res.status(400).json({ error: "destination parameter is required." });
     }
     
-    const query ="Skyline of " + destination;
+    const query = destination;
     const image = await getPexelsImage(query);
     if (!image) {
       return res.status(404).json({ error: "Image not found." });
