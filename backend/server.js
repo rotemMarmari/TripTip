@@ -1,14 +1,15 @@
 import express from "express";
 import cors from "cors";
 import { getCoords } from "./services/mapService.js";
-import { getTripTips, getPexelsImage } from "./services/ai.js";
+import { getAttractions, getPexelsImage } from "./services/ai.js";
+import Destination from "./services/dbService.js";
 
 const app = express();
 const PORT = 3000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173", 
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -20,7 +21,9 @@ app.get("/api/coords", async (req, res) => {
   try {
     const destination = req.query.destination;
     if (!destination) {
-      return res.status(400).json({ error: "Destination query parameter is required." });
+      return res
+        .status(400)
+        .json({ error: "Destination query parameter is required." });
     }
 
     const coords = await getCoords(destination);
@@ -36,34 +39,37 @@ app.get("/api/coords", async (req, res) => {
   }
 });
 
-app.get("/api/trip-tips", async (req, res) => {
+app.get("/api/attractions", async (req, res) => {
   try {
     const { destination, tripType } = req.query;
 
     if (!destination || !tripType) {
-      return res.status(400).json({ error: "Missing destination or trip type query parameter." });
+      return res
+        .status(400)
+        .json({ error: "Missing destination or trip type query parameter." });
     }
 
-    const tripTips = await getTripTips(destination, tripType); 
-    if (!tripTips) {
-      return res.status(404).json({ error: "No trip tips found." });
+    const attractions = await getAttractions(destination, tripType);
+    if (!attractions) {
+      return res.status(404).json({ error: "No attractions found." });
     }
 
-    res.status(200).json({ tripTips });
+    res.status(200).json({ attractions: attractions });
   } catch (error) {
-    console.error("Error fetching trip tips:", error.message);
-    res.status(500).send("An error occurred while fetching trip tips.");
+    console.error("Error fetching attractions:", error.message);
+    res.status(500).send("An error occurred while fetching attractions.");
   }
 });
 
-
 app.get("/api/GetImage", async (req, res) => {
   try {
-    const { destination  } = req.query;
-    if (!destination ) {
-      return res.status(400).json({ error: "destination parameter is required." });
+    const { destination } = req.query;
+    if (!destination) {
+      return res
+        .status(400)
+        .json({ error: "destination parameter is required." });
     }
-    
+
     const query = destination;
     const image = await getPexelsImage(query);
     if (!image) {
@@ -74,7 +80,7 @@ app.get("/api/GetImage", async (req, res) => {
     console.error("Error fetching image:", error.message);
     res.status(500).send("An error occurred while fetching image.");
   }
-})
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

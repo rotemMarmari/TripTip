@@ -4,14 +4,14 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import AttractionCard from "../components/AttractionCard";
 import "../styles/HomePage.css";
-import { fetchCoordinates, fetchTripTips, fetchImage } from "../API/axios";
+import { fetchCoordinates, fetchAttractions, fetchImage } from "../API/axios";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const HomePage = () => {
   const [destination, setDestination] = useState("");
   const [tripType, setTripType] = useState("Solo");
   const [coords, setCoords] = useState(null);
-  const [tripTips, setTripTips] = useState([]);
+  const [attractions, setAttractions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [searched, setSearched] = useState(false);
@@ -21,7 +21,7 @@ const HomePage = () => {
     try {
       const [result, tipResult, imageResult] = await Promise.all([
         fetchCoordinates(destination),
-        fetchTripTips(destination, tripType),
+        fetchAttractions(destination, tripType),
         fetchImage(destination),
       ]);
 
@@ -36,7 +36,7 @@ const HomePage = () => {
       if (tipResult) {
         try {
           const parsedTips = JSON.parse(tipResult[0]?.text ?? "{}");
-          setTripTips(parsedTips?.attractions || []);
+          setAttractions(parsedTips?.attractions || []);
         } catch (parseError) {
           console.error("Error parsing trip tips:", parseError);
           alert("Failed to parse trip tips.");
@@ -79,13 +79,13 @@ const HomePage = () => {
       </div>
       <div className="loader">{loading ? <CircularProgress /> : ""}</div>
       <div className="map-container">
-        <Map lat={coords?.lat} lon={coords?.lon} attractions={tripTips} />
+        <Map lat={coords?.lat} lon={coords?.lon} attractions={attractions} />
       </div>
       {/* Pass coordinates to Map */}
       <div className="tripTips">
         <h2>Trip Tips</h2>
         <div className="cards-container">
-          {tripTips.map((attraction, index) => (
+          {attractions.map((attraction, index) => (
             <AttractionCard
               key={index}
               attraction={attraction.name}

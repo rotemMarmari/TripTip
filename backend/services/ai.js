@@ -1,6 +1,6 @@
 import { CohereClientV2 } from "cohere-ai";
 import dotenv from "dotenv";
-import { createClient } from 'pexels';
+import { createClient } from "pexels";
 
 dotenv.config();
 const cohere = new CohereClientV2({
@@ -16,9 +16,9 @@ export const getPexelsImage = async (query) => {
     console.error("Error fetching Pexels image:", error.message);
     return null;
   }
-}
+};
 
-export const getTripTips = async (destination, tripType) => {
+export const getAttractions = async (destination, tripType) => {
   const prompt = `Generate a JSON object with an "attractions" field containing an array of tourist attractions in ${destination} for a ${tripType} trip. Each attraction should have "name", "description", and "coordinates" (latitude and longitude).`;
 
   try {
@@ -67,6 +67,6 @@ export const getTripTips = async (destination, tripType) => {
     }
   } catch (error) {
     console.error("Error calling Cohere API:", error);
-    throw new Error("Failed to fetch trip tips.");
+    throw new Error("Failed to fetch attractions.");
   }
 };

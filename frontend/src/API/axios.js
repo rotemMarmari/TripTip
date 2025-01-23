@@ -20,14 +20,14 @@ export const fetchCoordinates = async (destination) => {
   }
 }
 
-export const fetchTripTips = async (destination, tripType) => {
+export const fetchAttractions = async (destination, tripType) => {
   try {
-    const response = await api.get(`/api/trip-tips`, {
+    const response = await api.get(`/api/attractions`, {
       params: { destination, tripType }, 
     });
-    return response.data.tripTips; 
+    return response.data.attractions; 
   } catch (error) {
-    console.error("Error fetching trip tips:", error.message);
+    console.error("Error fetching attractions:", error.message);
     return null;
   }
 };
