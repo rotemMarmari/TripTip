@@ -4,7 +4,13 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import AttractionCard from "../components/AttractionCard";
 import "../styles/HomePage.css";
-import { fetchCoordinates, fetchAttractions, fetchImage } from "../API/axios";
+import {
+  fetchCoordinates,
+  fetchAttractions,
+  fetchImage,
+  checkDestinationInDB,
+  saveDestination,
+} from "../API/axios";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const HomePage = () => {
@@ -16,46 +22,76 @@ const HomePage = () => {
   const [image, setImage] = useState(null);
   const [searched, setSearched] = useState(false);
 
+  useEffect(() => {
+    console.log("Attractions data:", attractions);
+  }, [attractions]);
+  
   const handleSearch = async () => {
     setLoading(true);
-    try {
-      const [result, tipResult, imageResult] = await Promise.all([
-        fetchCoordinates(destination),
-        fetchAttractions(destination, tripType),
-        fetchImage(destination),
-      ]);
-
-      // Handle coordinates
-      if (result) {
-        setCoords(result);
-      } else {
-        alert("Location not found.");
-      }
-
-      // Handle trip tips
-      if (tipResult) {
-        try {
-          const parsedTips = JSON.parse(tipResult[0]?.text ?? "{}");
-          setAttractions(parsedTips?.attractions || []);
-        } catch (parseError) {
-          console.error("Error parsing trip tips:", parseError);
-          alert("Failed to parse trip tips.");
-        }
-      } else {
-        alert("Trip tips not found.");
-      }
-
-      // Handle image
-      if (imageResult) {
+    const data = await checkDestinationInDB(destination, tripType);
+    if (data.message === "Destination already exists.") {
+      console.log(data);
+      setCoords(
+        data.data.latitude && data.data.longitude
+          ? { lat: data.data.latitude, lon: data.data.longitude }
+          : null
+      );
+      setAttractions(data.data.attractions || []);
+      fetchImage(destination).then((result) => {
+        setImage(result);
         setSearched(true);
-        setImage(imageResult);
-      } else {
-        console.log("Image not found.");
+        setLoading(false);
+      });
+    } else {
+      try {
+        const result = await fetchCoordinates(destination);
+        const attractionsResult = await fetchAttractions(destination, tripType);
+        const imageResult = await fetchImage(destination);
+
+        // Handle coordinates
+        if (result) {
+          setCoords(result);
+        } else {
+          alert("Location not found.");
+          return;
+        }
+
+        // Handle trip tips
+        if (attractionsResult) {
+          try {
+            const parsedAttractions = JSON.parse(
+              attractionsResult[0]?.text ?? "{}"
+            );
+            setAttractions(parsedAttractions?.attractions || []);
+
+            // Save to DB after fetching everything
+            const saveToDB = await saveDestination(
+              destination,
+              tripType,
+              result,
+              parsedAttractions?.attractions
+            );
+            console.log(saveToDB);
+          } catch (parseError) {
+            console.error("Error parsing attractions:", parseError);
+            alert("Failed to parse attractions.");
+          }
+        } else {
+          alert("Attractions not found.");
+        }
+
+        // Handle image
+        if (imageResult) {
+          setImage(imageResult);
+          setSearched(true);
+        } else {
+          console.log("Image not found.");
+        }
+      } catch (error) {
+        console.error("Error during search:", error.message);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error during search:", error.message);
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -1,32 +1,32 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.swo2yb6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.swo2yb6.mongodb.net/TripTip?retryWrites=true&w=majority&appName=Cluster0`
   )
-  .then(() => console.log("MongoDB connected!"))
+  .then(() => console.log(`MongoDB connected!`))
   .catch((err) => console.error("MongoDB connection error:", err));
 
 
-// Attraction Schema
 const attractionSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    lat: { type: Number, required: true },
-    lon: { type: Number, required: true },
-  });
-  
-  // Destination Schema
-  const destinationSchema = new mongoose.Schema({
-    destination: { type: String, required: true },
-    tripType: { type: String, required: true },
-    lat: { type: Number, required: true },
-    lon: { type: Number, required: true },
-    attractions: { type: [attractionSchema], default: [] },
-  });
+  name: String,
+  description: String,
+  latitude: Number,
+  longitude: Number,
+});
+
+const destinationSchema = new mongoose.Schema({
+  destination: { type: String, required: true },
+  tripType: { type: String, required: true },
+  latitude: Number,
+  longitude: Number,
+  attractions: [attractionSchema], // Embedded sub-document for attractions
+});
 
 // Destination Model
 const Destination = mongoose.model("Destination", destinationSchema);
 
-// Export the Model
 export default Destination;

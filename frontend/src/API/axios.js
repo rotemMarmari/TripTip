@@ -34,7 +34,6 @@ export const fetchAttractions = async (destination, tripType) => {
 
 export const fetchImage = async (destination) => {
   try {
-    console.log("Fetching image for destination:", destination);
     const response = await api.get("/api/GetImage", {
       params: { destination }, 
     });
@@ -45,6 +44,32 @@ export const fetchImage = async (destination) => {
   }
 };
 
+export const checkDestinationInDB = async (destination, tripType) => {
+  try {
+    const response = await api.get(`/api/checkDestination`, {
+      params: { destination, tripType }, 
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Error checking destination:", error.message);
+    return null;
+  }
+}
+
+export const saveDestination = async (destination, tripType, coords, attractions) => {
+  try {
+    const response = await api.post(`/api/saveDestination`, {
+      destination,
+      tripType,
+      coords,
+      attractions
+    });
+    return response.data; // Returns the saved data from the backend
+  } catch (error) {
+    console.error("Error saving destination:", error.message);
+    return null;
+  }
+};
 
 
 export default api;

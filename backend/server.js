@@ -82,6 +82,76 @@ app.get("/api/GetImage", async (req, res) => {
   }
 });
 
+//check if data already exists in db
+app.get("/api/checkDestination", async (req, res) => {
+  try {
+    console.log("Checking data base...");
+    const { destination, tripType } = req.query;
+    if (!destination || !tripType) {
+      return res
+        .status(400)
+        .json({ error: "Missing destination or trip type query parameter." });
+    }
+
+    const existingRecord = await Destination.findOne({
+      destination,
+      tripType,
+    });
+
+    if (existingRecord) {
+      console.log('Existing record found:', existingRecord);
+      return res.status(200).json({ message: "Destination already exists.", data: existingRecord });
+    } else {
+      return res.status(201).json({ message: "Destination does not exist." });
+    }
+  } catch (error) {
+    console.error("Error checking destination:", error.message);
+    res.status(500).send("An error occurred while checking destination.");
+  }
+    });
+
+app.post("/api/saveDestination", async (req, res) => {
+  try {
+    const { destination, tripType, coords, attractions } = req.body;
+    if (!destination || !tripType || !coords || !attractions) {
+      return res
+        .status(400)
+        .json({ error: "Missing required parameters." });
+    }
+
+    // Check if destination and trip type already exist
+    const existingRecord = await Destination.findOne({
+      destination,
+      tripType,
+    });
+
+    if (existingRecord) {
+      return res.status(200).json({ message: "Destination already exists.", data: existingRecord });
+    }
+
+    // Save data in the database
+    const newDestination = new Destination({
+      destination,
+      tripType,
+      latitude: coords.lat,
+      longitude: coords.lon,
+      attractions: attractions.map((attr) => ({
+        name: attr.name,
+        description: attr.description,
+        latitude: attr.coordinates?.latitude,
+        longitude: attr.coordinates?.longitude,
+      })),
+    });
+
+    await newDestination.save();
+    res.status(201).json({ message: "Destination saved successfully.", data: newDestination });
+  } catch (error) {
+    console.error("Error saving destination:", error.message);
+    res.status(500).send("An error occurred while saving the destination.");
+  }
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
