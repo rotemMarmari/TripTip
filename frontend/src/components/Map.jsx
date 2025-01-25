@@ -28,17 +28,16 @@ const Map = ({ lat, lon, attractions }) => {
 
     markersLayer.current.clearLayers();
     if (attractions && attractions.length > 0) {
-      attractions.forEach(({ latitude, longitude, name }) => {
-        if (latitude && longitude) {
-          L.marker(
-            [parseFloat(latitude.toFixed(4)), parseFloat(longitude.toFixed(4))],
-            { alt: name }
-          )
+      attractions.forEach(({ name, coordinates }) => {
+        if (coordinates && coordinates.length === 2) {
+          const [lat, lon] = coordinates;
+          L.marker([lat, lon], { alt: name })
             .addTo(markersLayer.current)
             .bindPopup(`<b>${name}</b>`);
         }
       });
     }
+    
   }, [lat, lon, attractions]);
 
   return <div ref={mapRef} style={{ height: "80vh", width: "200vh" }} />;

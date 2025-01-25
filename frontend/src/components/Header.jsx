@@ -1,16 +1,12 @@
 import React from "react";
-import "../styles/Header.css";
+import travel from "../assets/travel.svg";
 
 const Header = () => {
   return (
-    <header className="header">
-      <h1>TripTip</h1>
-      <nav>
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
-      </nav>
-    </header>
+    <div className="bg-gradient-to-b from-blue-500 to-white text-white p-11 flex flex-col items-center">
+      <img src={travel} alt="Travel" className="w-20 h-20" />
+      <h1 className="text-7xl font-bold text-white drop-shadow-lg">TripTip</h1>
+    </div>
   );
 };
 

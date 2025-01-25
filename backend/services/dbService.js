@@ -11,12 +11,20 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 
-const attractionSchema = new mongoose.Schema({
-  name: String,
-  description: String,
-  latitude: Number,
-  longitude: Number,
-});
+  const attractionSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    coordinates: {
+      type: [Number], // Array of numbers [latitude, longitude]
+      required: true,
+      validate: {
+        validator: function (value) {
+          return value.length === 2; // Ensure the array has exactly two elements
+        },
+        message: "Coordinates must contain exactly two elements: [latitude, longitude]",
+      },
+    },
+  });
 
 const destinationSchema = new mongoose.Schema({
   destination: { type: String, required: true },

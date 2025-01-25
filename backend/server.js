@@ -99,7 +99,6 @@ app.get("/api/checkDestination", async (req, res) => {
     });
 
     if (existingRecord) {
-      console.log('Existing record found:', existingRecord);
       return res.status(200).json({ message: "Destination already exists.", data: existingRecord });
     } else {
       return res.status(201).json({ message: "Destination does not exist." });
@@ -138,8 +137,7 @@ app.post("/api/saveDestination", async (req, res) => {
       attractions: attractions.map((attr) => ({
         name: attr.name,
         description: attr.description,
-        latitude: attr.coordinates?.latitude,
-        longitude: attr.coordinates?.longitude,
+        coordinates: attr.coordinates,
       })),
     });
 

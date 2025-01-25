@@ -22,56 +22,39 @@ const HomePage = () => {
   const [image, setImage] = useState(null);
   const [searched, setSearched] = useState(false);
 
-  useEffect(() => {
-    console.log("Attractions data:", attractions);
-  }, [attractions]);
-  
   const handleSearch = async () => {
     setLoading(true);
     const data = await checkDestinationInDB(destination, tripType);
-    if (data.message === "Destination already exists.") {
-      console.log(data);
-      setCoords(
-        data.data.latitude && data.data.longitude
-          ? { lat: data.data.latitude, lon: data.data.longitude }
-          : null
-      );
-      setAttractions(data.data.attractions || []);
-      fetchImage(destination).then((result) => {
-        setImage(result);
-        setSearched(true);
-        setLoading(false);
-      });
-    } else {
+    if (data.message === "Destination does not exist.") {
       try {
-        const result = await fetchCoordinates(destination);
-        const attractionsResult = await fetchAttractions(destination, tripType);
-        const imageResult = await fetchImage(destination);
+        const [result, attractionsResult, imageResult] = await Promise.all([
+          fetchCoordinates(destination),
+          fetchAttractions(destination, tripType),
+          fetchImage(destination),
+        ]);
 
-        // Handle coordinates
         if (result) {
           setCoords(result);
         } else {
           alert("Location not found.");
-          return;
         }
-
-        // Handle trip tips
+        let normalizedAttractions = [];
         if (attractionsResult) {
           try {
             const parsedAttractions = JSON.parse(
               attractionsResult[0]?.text ?? "{}"
             );
-            setAttractions(parsedAttractions?.attractions || []);
-
-            // Save to DB after fetching everything
-            const saveToDB = await saveDestination(
-              destination,
-              tripType,
-              result,
-              parsedAttractions?.attractions
-            );
-            console.log(saveToDB);
+              normalizedAttractions = (
+              parsedAttractions?.attractions || []
+            ).map((attraction) => ({
+              name: attraction.name,
+              description: attraction.description,
+              coordinates: [
+                attraction.coordinates?.latitude,
+                attraction.coordinates?.longitude,
+              ],
+            }));
+            setAttractions(normalizedAttractions);
           } catch (parseError) {
             console.error("Error parsing attractions:", parseError);
             alert("Failed to parse attractions.");
@@ -80,12 +63,37 @@ const HomePage = () => {
           alert("Attractions not found.");
         }
 
-        // Handle image
         if (imageResult) {
-          setImage(imageResult);
           setSearched(true);
+          setImage(imageResult);
         } else {
           console.log("Image not found.");
+        }
+
+        if (result && normalizedAttractions.length > 0) {
+          saveDestination(destination, tripType, result, normalizedAttractions);
+        }
+      } catch (error) {
+        console.error("Error during search:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      try {
+        setCoords({ lat: data.data.latitude, lon: data.data.longitude });
+        const normalizedAttractions = data.data.attractions.map(
+          (attraction) => ({
+            ...attraction,
+            coordinates: attraction.coordinates,
+          })
+        );
+        setAttractions(normalizedAttractions);
+
+        setSearched(true);
+
+        const imageResult = await fetchImage(destination);
+        if (imageResult) {
+          setImage(imageResult);
         }
       } catch (error) {
         console.error("Error during search:", error.message);
