@@ -23,6 +23,11 @@ const HomePage = () => {
   const [searched, setSearched] = useState(false);
 
   const handleSearch = async () => {
+    if (!destination.trim()) {
+      alert("Please enter a destination before searching.");
+      return;
+    }
+    
     setLoading(true);
     const data = await checkDestinationInDB(destination, tripType);
     if (data.message === "Destination does not exist.") {
@@ -44,16 +49,16 @@ const HomePage = () => {
             const parsedAttractions = JSON.parse(
               attractionsResult[0]?.text ?? "{}"
             );
-              normalizedAttractions = (
-              parsedAttractions?.attractions || []
-            ).map((attraction) => ({
-              name: attraction.name,
-              description: attraction.description,
-              coordinates: [
-                attraction.coordinates?.latitude,
-                attraction.coordinates?.longitude,
-              ],
-            }));
+            normalizedAttractions = (parsedAttractions?.attractions || []).map(
+              (attraction) => ({
+                name: attraction.name,
+                description: attraction.description,
+                coordinates: [
+                  attraction.coordinates?.latitude,
+                  attraction.coordinates?.longitude,
+                ],
+              })
+            );
             setAttractions(normalizedAttractions);
           } catch (parseError) {
             console.error("Error parsing attractions:", parseError);
@@ -106,28 +111,75 @@ const HomePage = () => {
   return (
     <div>
       <Header />
-      <div className="searchBox-container">
+      <div className="intro-container bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-center p-8 rounded-2xl shadow-lg my-6 mx-auto max-w-4xl">
+        <h1 className="text-4xl font-bold mb-4">Welcome to TripTip!</h1>
+        <p className="text-lg mb-6">
+          Planning your next adventure just got easier. <br />
+          With TripTip, you can:
+        </p>
+        <ul className="text-left mx-auto text-base space-y-3 max-w-md">
+          <li className="flex items-center">
+            <span className="w-6 h-6 bg-white text-blue-500 rounded-full flex items-center justify-center mr-3 font-semibold">
+              1
+            </span>
+            Search for your dream destination
+          </li>
+          <li className="flex items-center">
+            <span className="w-6 h-6 bg-white text-blue-500 rounded-full flex items-center justify-center mr-3 font-semibold">
+              2
+            </span>
+            Choose your trip style (Solo, Family, Couple, Friends)
+          </li>
+          <li className="flex items-center">
+            <span className="w-6 h-6 bg-white text-blue-500 rounded-full flex items-center justify-center mr-3 font-semibold">
+              3
+            </span>
+            Explore your custom map with top attractions tailored to your trip
+            type
+          </li>
+          <li className="flex items-center">
+            <span className="w-6 h-6 bg-white text-blue-500 rounded-full flex items-center justify-center mr-3 font-semibold">
+              4
+            </span>
+            Get AI-powered insights and descriptions about each attraction
+          </li>
+        </ul>
+        <p className="text-lg mt-6">Start planning your perfect journey now!</p>
+      </div>
+
+      <div className="searchBox-container bg-white p-6 rounded-2xl shadow-lg flex flex-col md:flex-row items-center gap-4 max-w-4xl mx-auto my-8">
         <input
           type="text"
           placeholder="Enter destination"
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
+          className="w-full md:w-1/2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
         />
-        <select onChange={(e) => setTripType(e.target.value)} value={tripType}>
+        <select
+          onChange={(e) => setTripType(e.target.value)}
+          value={tripType}
+          className="w-full md:w-1/4 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-700"
+        >
           <option value="Solo">Solo</option>
           <option value="Family">Family</option>
           <option value="Couple">Couple</option>
           <option value="Friends Group">Friends Group</option>
         </select>
-        <button onClick={handleSearch}>Search</button>
+        <button
+          onClick={handleSearch}
+          className="w-full md:w-auto px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Search
+        </button>
       </div>
+
       <div className="loader">{loading ? <CircularProgress /> : ""}</div>
       <div className="map-container">
         <Map lat={coords?.lat} lon={coords?.lon} attractions={attractions} />
       </div>
       {/* Pass coordinates to Map */}
-      <div className="tripTips">
-        <h2>Trip Tips</h2>
+      <div className="attractions-container">
+        {attractions.length > 0 && <h2>Attractions in {destination}</h2>}
         <div className="cards-container">
           {attractions.map((attraction, index) => (
             <AttractionCard

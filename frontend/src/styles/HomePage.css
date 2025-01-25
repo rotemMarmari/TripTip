@@ -1,22 +1,3 @@
-
-
-
-button{
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: lightblue;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-button:hover{
-    background-color: grey;
-}
-
 .loader{
     display: flex;
     justify-content: center;
@@ -30,11 +11,20 @@ button:hover{
   justify-content: center; 
 }
 
-.tripTips {
+.attractions-container {
   padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
-.searchBox-container{
+.attractions-container h2 {
+  margin-bottom: 10px;
+  font-size: 5vh;
+}
+
+/* .searchBox-container{
     margin-top: 20px;
     padding: 10px 20px;
     border: none;
@@ -84,6 +74,23 @@ button:hover{
     background: #315cfd;
     color: white;
     font-size: 1.1em;
+  } */
+
+  button {
+    background-color: #f3f7fe;
+    color: #3b82f6;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    width: 100px;
+    height: 45px;
+    transition: 0.3s;
+  }
+  
+  button:hover {
+    background-color: #3b82f6;
+    box-shadow: 0 0 0 5px #3b83f65f;
+    color: #fff;
   }
   
 
@@ -91,10 +98,11 @@ button:hover{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
   }
   
   .image-container img {
-    max-width: 50%;
+    max-width: 35%;
     height: auto;
   }

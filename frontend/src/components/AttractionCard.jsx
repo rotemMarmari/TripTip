@@ -12,11 +12,16 @@ const AttractionCard = ({ attraction, description }) => {
       useEffect(() => {
         fetchImage(attraction).then(setImage);
       }, [attraction]);
+      
     return (
         <Card sx={{ maxWidth: 275, margin: "10px" }}>
       <CardMedia
         component="img"
-        height="140"
+        sx={{
+          height: 140,
+          width: "100%",
+          objectFit: "cover",
+        }}
         image={image}
         alt={attraction}
       />
