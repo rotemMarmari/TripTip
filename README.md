@@ -16,6 +16,8 @@ TripTip is for anyone planning to travel and curious about the attractions avail
   - Short description
 - **Destination Image**: A visually appealing image of the destination.
 
+![צילום מסך 2025-01-26 125632](https://github.com/user-attachments/assets/d9506e4d-65f5-4831-8e6d-85937ce1f5f4)
+
 ![image](https://github.com/user-attachments/assets/ccd0c291-522d-424d-a15b-d22f4be547c6)
 
 ## Technologies Used
