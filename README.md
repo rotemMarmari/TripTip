@@ -111,6 +111,9 @@ To set up the project locally:
 ## Deployment
 Deployment is not yet complete. Future updates will include deployment details.
 
+![image](https://github.com/user-attachments/assets/4650b4cb-4390-4cb5-8750-08f19127439e)
+
+
 ## Contributing
 Contributions are welcome! Feel free to open issues or submit pull requests. No specific guidelines are set at the moment, but be respectful of the project’s goals and structure.
 
