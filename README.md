@@ -120,7 +120,7 @@ Deployment is not yet complete. Future updates will include deployment details.
 Contributions are welcome! Feel free to open issues or submit pull requests. No specific guidelines are set at the moment, but be respectful of the project’s goals and structure.
 
 ## Known Issues
-There are no known issues at the moment. Testing will be conducted to identify and address potential bugs.
+The Pexels API may return inaccurate images for less well-known destinations. In such cases, it might provide a random image of a nearby or unrelated location.
 
 ---
 
