@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const PORT = 3000;
-const BASE_URL = `http://localhost:${PORT}`;
+const BASE_URL = "https://triptip-backend.onrender.com";
 
 const api = axios.create({
   baseURL: BASE_URL,
