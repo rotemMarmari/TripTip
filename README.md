@@ -111,7 +111,7 @@ To set up the project locally:
        ```
 
 ## Deployment
-Deployment is not yet complete. Future updates will include deployment details.
+The project is deployed at [TripTip](https://triptip-frontend.onrender.com/#).
 
 ![image](https://github.com/user-attachments/assets/4650b4cb-4390-4cb5-8750-08f19127439e)
 
@@ -120,9 +120,10 @@ Deployment is not yet complete. Future updates will include deployment details.
 Contributions are welcome! Feel free to open issues or submit pull requests. No specific guidelines are set at the moment, but be respectful of the project’s goals and structure.
 
 ## Known Issues
-The Pexels API may return inaccurate images for less well-known destinations. In such cases, it might provide a random image of a nearby or unrelated location.
+* The Pexels API may return inaccurate images for less well-known destinations. In such cases, it might provide a random image of a nearby or unrelated location.
 
----
+* Some attraction markers may not be 100% accurate for lesser-known places. The AI generating coordinates might provide an estimated guess if the location is not well documented.
+**---
 
 Feel free to provide feedback or suggest changes to improve the README further. Once your app is tested and deployed, this README can be updated with screenshots, deployment instructions, and any additional instructions.
 
