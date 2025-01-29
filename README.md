@@ -124,7 +124,7 @@ Contributions are welcome! Feel free to open issues or submit pull requests. No 
 
 * Some attraction markers may not be 100% accurate for lesser-known places. The AI generating coordinates might provide an estimated guess if the location is not well documented.
 
-**---
+---
 
 Feel free to provide feedback or suggest changes to improve the README further. Once your app is tested and deployed, this README can be updated with screenshots, deployment instructions, and any additional instructions.
 
